@@ -31,4 +31,10 @@ public class ItemManager : MonoBehaviour
     {
         
     }
+
+    void SetItem()
+    {
+        WRandom.WeightedRandomPicker<string> randomPicker;
+        //제네릭 클래스 좀더 공부하고 가중치랜덤으로 확률 바꿔가면서 시작할때 상점에 스킬 배치해보기
+    }
 }
