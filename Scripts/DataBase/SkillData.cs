@@ -5,7 +5,7 @@ using UnityEngine;
 public static class SkillData
 {
     //스킬이름은 항상 Pefeb이름과 같아야 한다. 그래야 Resources 폴더에서 가져옴
-    public enum SKILLS
+    public enum Skills
     {
         /**********1000**********/
         A = 1000,B,C,D,
@@ -45,5 +45,11 @@ public static class SkillData
 
         /**********10************/
 
+    }
+
+    public enum SkillPrice
+    {
+        //등급 별로 가격나눔 임시로 원,투,쓰리
+        One = 100, Two = 200, Three = 300
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System;
 
@@ -41,13 +42,13 @@ public class ItemManager : MonoBehaviour
     //랜덤으로 뽑을 스킬 추가
     void AddSkills()
     {
-        skillNameArray = new string[Enum.GetValues(typeof(SkillData.SKILLS)).Length];
-        skillWeightedArray = new int[Enum.GetValues(typeof(SkillData.SKILLS)).Length];
+        skillNameArray = new string[Enum.GetValues(typeof(SkillData.Skills)).Length];
+        skillWeightedArray = new int[Enum.GetValues(typeof(SkillData.Skills)).Length];
 
-        Debug.Log($"스킬 개수 = {Enum.GetValues(typeof(SkillData.SKILLS)).Length}");
+        Debug.Log($"스킬 개수 = {Enum.GetValues(typeof(SkillData.Skills)).Length}");
 
-        skillNameArray = typeof(SkillData.SKILLS).GetEnumNames();//'SKILLS'에서 이름 있는 것들만 뽑아오기 | skillNameArray 세팅
-        SetSkillWeightedArray();//스킬 가중치 모와두기 | skillWeightedArray 세팅
+        skillNameArray = typeof(SkillData.Skills).GetEnumNames();//'Skills'에서 이름 있는 것들만 뽑아오기 (skillNameArray 세팅)
+        SetSkillWeightedArray();//스킬 가중치 모와두기 (skillWeightedArray 세팅)
 
         //스킬,가중치 하나씩 추가 (가중치가 높을수록 잘뽑힘)
         for (int i = 0; i < skillNameArray.Length; i++)
@@ -57,12 +58,13 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    //상점 팝업에 랜덤으로 스킬 배치
+    //상점 팝업에 랜덤으로, 중복 안되게 스킬 배치
     void SetSkills()
     {
         GameObject prefeb;
         GameObject skill;
         string skillName = "";
+        bool overlap = false;
         List<string> skillList = new List<string>();
 
         for (int i = 0; i < items.Length; i++)
@@ -75,14 +77,20 @@ public class ItemManager : MonoBehaviour
             skill.transform.SetParent(items[i].transform, false);//부모 지정
             skill.transform.SetAsFirstSibling();//버튼은 RectTransform 이라 내려도 GameObject가 더 내려감 그래서 그냥 게임오브젝트를 젤 위로 올림
         }
+
+        overlap = skillList.GroupBy(x => x).All(g => g.Count() == 1);
+        if(overlap == false)
+        {
+            Redraw();
+        }
     }
 
-    //'SkillData.SKILLS'에서 key를 하나씩 넣어서 key에 해당하는 value를 저장하는 함수
+    //'SkillData.Skills'에서 key를 하나씩 넣어서 key에 해당하는 value를 저장하는 함수
     void SetSkillWeightedArray()
     {
         for (int i = 0; i < skillNameArray.Length; i++)
         {
-            skillWeightedArray[i] = (int)Enum.Parse(typeof(SkillData.SKILLS), skillNameArray[i]);
+            skillWeightedArray[i] = (int)Enum.Parse(typeof(SkillData.Skills), skillNameArray[i]);
         }
     }
 
